@@ -72,7 +72,8 @@ exports.signup = async (req, res) => {
     }
 
     // Queue email 
-    const verificationUrl = `${process.env.FRONTEND_URL}/auth/verify-email/${verificationToken}`;
+    // const verificationUrl = `${process.env.FRONTEND_URL}/auth/verify-email/${verificationToken}`;
+    const verificationUrl = `${process.env.FRONTEND_URL}/verify-email/${verificationToken}`;
     queueEmail({
       to: user.email,
       template: 'emailVerification',

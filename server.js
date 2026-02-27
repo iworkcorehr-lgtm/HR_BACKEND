@@ -3,7 +3,7 @@ const http = require('http');
 require('dotenv').config();
 
 
-  require('./emailWorker');
+  // require('./emailWorker');
 
 const server = http.createServer(app);
 

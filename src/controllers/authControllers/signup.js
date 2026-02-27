@@ -82,13 +82,22 @@ exports.signup = async (req, res) => {
     //   console.error('Failed to queue verification email:', err);
     // });
 
+    console.log('[Signup] Verification token generated:', verificationToken);
+    console.log('[Signup] Verification URL:', verificationUrl);
+    console.log('[Signup] Attempting to send email to:', user.email);
+
     sendEmail({
       to: user.email,
       template: 'emailVerification',
       data: { email: user.email, verificationUrl }
+    }).then(() => {
+      console.log('[Signup] ✅ Verification email sent successfully to:', user.email);
     }).catch(err => {
-      console.error('Failed to send verification email:', err);
+      console.error('[Signup] ❌ Failed to send verification email:', err.message);
+      console.error('[Signup] Full error:', err);
     });
+
+    console.log('[Signup] User created, responding to client...');
 
 
     res.status(201).json({

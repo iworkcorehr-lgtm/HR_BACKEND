@@ -1,5 +1,5 @@
 const { Resend } = require('resend');
-const emailQueue = require('../config/emailQueue');
+// const emailQueue = require('../config/emailQueue');
 require('dotenv').config();
 
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -91,7 +91,7 @@ const templates = {
 exports.queueEmail = async (options) => {
   try {
     await emailQueue.add('email', options);
-    
+
     console.log(`Email queued for ${options.to}`);
     return true;
   } catch (error) {
@@ -101,21 +101,41 @@ exports.queueEmail = async (options) => {
 };
 
 // Send email
+// exports.sendEmail = async (options) => {
+//   try {
+//     const template = templates[options.template](options.data);
+
+//     await resend.emails.send({
+//       from: 'iWorkCore <onboarding@resend.dev>',
+//       to: options.to,
+//       subject: template.subject,
+//       html: template.html
+//     });
+
+//     console.log(`Email sent successfully to ${options.to}`);
+//     return true;
+//   } catch (error) {
+//     console.error('Email sending failed:', error);
+//     throw new Error('Failed to send email');
+//   }
+// };
+
 exports.sendEmail = async (options) => {
+  console.log('[Email] Sending email to:', options.to);
+  console.log('[Email] Template:', options.template);
+  console.log('[Email] RESEND_API_KEY exists:', !!process.env.RESEND_API_KEY);
   try {
     const template = templates[options.template](options.data);
-    
-    await resend.emails.send({
+    const result = await resend.emails.send({
       from: 'iWorkCore <onboarding@resend.dev>',
       to: options.to,
       subject: template.subject,
       html: template.html
     });
-    
-    console.log(`Email sent successfully to ${options.to}`);
+    console.log('[Email] ✅ Resend response:', result);
     return true;
   } catch (error) {
-    console.error('Email sending failed:', error);
+    console.error('[Email] ❌ Resend error:', error);
     throw new Error('Failed to send email');
   }
 };

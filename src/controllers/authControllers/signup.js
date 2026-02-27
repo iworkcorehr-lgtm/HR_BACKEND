@@ -65,6 +65,14 @@ exports.signup = async (req, res) => {
     await user.save({ validateBeforeSave: false });
     isNewUser = true;
 
+    await user.save({ validateBeforeSave: false });
+    isNewUser = true;
+
+    // ✅ Add this
+    const savedUser = await User.findById(user._id);
+    console.log('[Signup] Saved emailVerificationToken:', savedUser.emailVerificationToken ? 'exists' : 'MISSING');
+    console.log('[Signup] Saved emailVerificationTokenExpires:', savedUser.emailVerificationTokenExpires);
+
     // Mark invite as accepted if applicable
     if (inviteToken) {
       const Invite = require('../../models/Invitation');

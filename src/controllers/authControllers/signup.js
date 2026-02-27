@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const User = require('../../models/User');
-const { queueEmail } = require('../../utils/email');
+const { queueEmail, sendEmail } = require('../../utils/email');
 require('dotenv').config();
 
 exports.signup = async (req, res) => {
@@ -46,7 +46,7 @@ exports.signup = async (req, res) => {
     });
 
     // Create email verification token
-   const verificationToken = user.generateSecureToken('emailVerificationToken', 1440);
+    const verificationToken = user.generateSecureToken('emailVerificationToken', 1440);
 
     // Generate tokens
     const accessToken = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
@@ -74,12 +74,20 @@ exports.signup = async (req, res) => {
     // Queue email 
     // const verificationUrl = `${process.env.FRONTEND_URL}/auth/verify-email/${verificationToken}`;
     const verificationUrl = `${process.env.FRONTEND_URL}/verify-email/${verificationToken}`;
-    queueEmail({
+    // queueEmail({
+    //   to: user.email,
+    //   template: 'emailVerification',
+    //   data: { email: user.email, verificationUrl }
+    // }).catch(err => {
+    //   console.error('Failed to queue verification email:', err);
+    // });
+
+    sendEmail({
       to: user.email,
       template: 'emailVerification',
       data: { email: user.email, verificationUrl }
     }).catch(err => {
-      console.error('Failed to queue verification email:', err);
+      console.error('Failed to send verification email:', err);
     });
 
 

@@ -49,16 +49,22 @@ exports.sendVerificationEmail = async (req, res) => {
 exports.verifyEmail = async (req, res) => {
   try {
     const { token } = req.params;
+    console.log('[VerifyEmail] Token received:', token);
 
     const users = await User.find({
       emailVerificationExpires: { $gt: Date.now() },
     });
 
-    const user = users.find(u =>
-      bcrypt.compareSync(token, u.emailVerificationToken)
-    );
+    console.log('[VerifyEmail] Users with valid expiry found:', users.length);
+
+    const user = users.find(u => {
+      const match = bcrypt.compareSync(token, u.emailVerificationToken);
+      console.log('[VerifyEmail] Checking:', u.email, '| match:', match);
+      return match;
+    });
 
     if (!user) {
+      console.log('[VerifyEmail] No matching user found');
       return res.status(400).json({ status: 'error', message: 'Invalid or expired verification token' });
     }
 
@@ -67,10 +73,7 @@ exports.verifyEmail = async (req, res) => {
     user.emailVerificationExpires = undefined;
     await user.save({ validateBeforeSave: false });
 
-    res.status(200).json({
-      status: 'success',
-      message: 'Email verified successfully',
-    });
+    res.status(200).json({ status: 'success', message: 'Email verified successfully' });
   } catch (error) {
     console.error('Verify email error:', error);
     res.status(500).json({ status: 'error', message: 'Server error while verifying email' });

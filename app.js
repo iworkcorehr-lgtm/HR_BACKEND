@@ -117,9 +117,11 @@ app.get("/", (req, res) => {
 
 // Import routes 
 const authRoutes = require('./src/routes/authRoutes');
+const onboardingRoutes = require('./src/routes/onboardingRoutes');
 
 // Apply rate limiter only to auth routes
 app.use('/api', limiter, authRoutes);
+app.use('/api/onboarding', limiter, onboardingRoutes);
 
 // Handle undefined routes
 app.all(/.*/, (req, res) => {

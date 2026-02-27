@@ -52,7 +52,7 @@ exports.verifyEmail = async (req, res) => {
     console.log('[VerifyEmail] Token received:', token);
 
     const users = await User.find({
-      emailVerificationExpires: { $gt: Date.now() },
+      emailVerificationTokenExpires: { $gt: Date.now() },
     });
 
     console.log('[VerifyEmail] Users with valid expiry found:', users.length);
@@ -70,7 +70,7 @@ exports.verifyEmail = async (req, res) => {
 
     user.emailVerified = true;
     user.emailVerificationToken = undefined;
-    user.emailVerificationExpires = undefined;
+    user.emailVerificationTokenExpires = undefined;
     await user.save({ validateBeforeSave: false });
 
     res.status(200).json({ status: 'success', message: 'Email verified successfully' });

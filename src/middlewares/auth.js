@@ -64,7 +64,7 @@ exports.protect = async (req, res, next) => {
 
 // Require email verification
 exports.requireEmailVerification = (req, res, next) => {
-  if (!req.user.isEmailVerified) {
+  if (!req.user.emailVerified) {
     return res.status(403).json({
       status: 'error',
       message: 'Please verify your email to access this resource.'

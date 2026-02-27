@@ -6,7 +6,7 @@ const {
   getOnboardingStatus,
   setSetupPreferences,
   completeOnboarding
-} = require('../controllers/onboardingController');
+} = require('../controllers/companyOnboardingController');
 
 // === MIDDLEWARES ===
 const {

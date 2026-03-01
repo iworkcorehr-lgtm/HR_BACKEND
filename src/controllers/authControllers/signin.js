@@ -89,7 +89,8 @@ exports.signin = async (req, res) => {
       companyId: user.companyId,
       onboarded: user.onboarded,
       status: user.status,
-      twoFactorEnabled: user.twoFactorEnabled
+      twoFactorEnabled: user.twoFactorEnabled,
+      emailVerified: user.emailVerified
     };
 
     // Success response

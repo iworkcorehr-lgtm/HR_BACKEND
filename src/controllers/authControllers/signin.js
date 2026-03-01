@@ -27,14 +27,6 @@ exports.signin = async (req, res) => {
       });
     }
 
-    // Check if email verified
-    // if (!user.emailVerified) {
-    //   return res.status(403).json({
-    //     status: 'error',
-    //     message: 'Please verify your email before signing in.'
-    //   });
-    // }
-
     // Compare password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
